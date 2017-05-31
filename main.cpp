@@ -3,6 +3,8 @@
 #include <QComboBox>
 #include <QGridLayout>
 #include <QLabel>
+#include <QSlider>
+#include <QRadioButton>
 
 int main(int argc, char *argv[])
 {
@@ -46,6 +48,30 @@ int main(int argc, char *argv[])
     hw9->addItems(hwChoices);
     hw10->addItems(hwChoices);
 
+    //Create the Midterm and Final input
+    QSlider *mt1slide = new QSlider(Qt::Horizontal);
+    mt1slide->setMaximum(45);
+    QSlider *mt2slide = new QSlider(Qt::Horizontal);
+    mt2slide->setMaximum(45);
+    QSlider *finalSlide = new QSlider(Qt::Horizontal);
+    finalSlide->setMaximum(45);
+    QLabel *mt1text = new QLabel("Midterm 1:");
+    QLabel *mt2text = new QLabel("Midterm 2:");
+    QLabel *finalText = new QLabel("Final:");
+    QLabel *mt1display = new QLabel("0");
+    QLabel *mt2display = new QLabel("0");
+    QLabel *finalDisplay = new QLabel("0");
+    //Connect our signals and slots
+    QObject::connect(mt1slide, SIGNAL(valueChanged(int)), mt1display, SLOT(setNum(int)));
+    QObject::connect(mt2slide, SIGNAL(valueChanged(int)), mt2display, SLOT(setNum(int)));
+    QObject::connect(finalSlide, SIGNAL(valueChanged(int)), finalDisplay, SLOT(setNum(int)));
+
+    //Create the Grading input and ouput
+    QRadioButton *choice1 = new QRadioButton("Scheme 1");
+    QRadioButton *choice2 = new QRadioButton("Scheme 2");
+    QLabel *scoreText = new QLabel("Total Score out of 100:");
+    QLabel *score = new QLabel("0");
+
     //Create the Layout
     QGridLayout *layout = new QGridLayout;
     //Add the text
@@ -70,6 +96,21 @@ int main(int argc, char *argv[])
     layout->addWidget(hw8, 7 , 1);
     layout->addWidget(hw9, 8 , 1);
     layout->addWidget(hw10, 9 , 1);
+    //Add the midterm information
+    layout->addWidget(mt1text, 0, 2);
+    layout->addWidget(mt1slide, 1, 2);
+    layout->addWidget(mt1display, 2, 2);
+    layout->addWidget(mt2text, 3, 2);
+    layout->addWidget(mt2slide, 4, 2);
+    layout->addWidget(mt2display, 5, 2);
+    layout->addWidget(finalText, 6, 2);
+    layout->addWidget(finalSlide, 7, 2);
+    layout->addWidget(finalDisplay, 8, 2);
+    //Finally add the grading information
+    layout->addWidget(choice1, 10, 0);
+    layout->addWidget(choice2, 11, 0);
+    layout->addWidget(scoreText, 10, 1);
+    layout->addWidget(score, 11, 1);
 
     window->setLayout(layout);
     w.setCentralWidget(window);
