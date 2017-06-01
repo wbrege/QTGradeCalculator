@@ -5,13 +5,14 @@
 #include <QLabel>
 #include <QSlider>
 #include <QRadioButton>
+#include <QPushButton>
+#include "scorelabel.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
     QWidget *window = new QWidget();
-    //QWidget *windowText = new QWidget();
 
     //Create the Text Boxes
     QLabel *hw1Text = new QLabel("HW1: ");
@@ -48,13 +49,15 @@ int main(int argc, char *argv[])
     hw9->addItems(hwChoices);
     hw10->addItems(hwChoices);
 
+    //totalScore += hw1->currentIndex();
+
     //Create the Midterm and Final input
     QSlider *mt1slide = new QSlider(Qt::Horizontal);
     mt1slide->setMaximum(45);
     QSlider *mt2slide = new QSlider(Qt::Horizontal);
     mt2slide->setMaximum(45);
     QSlider *finalSlide = new QSlider(Qt::Horizontal);
-    finalSlide->setMaximum(45);
+    finalSlide->setMaximum(100);
     QLabel *mt1text = new QLabel("Midterm 1:");
     QLabel *mt2text = new QLabel("Midterm 2:");
     QLabel *finalText = new QLabel("Final:");
@@ -70,11 +73,28 @@ int main(int argc, char *argv[])
     QRadioButton *choice1 = new QRadioButton("Scheme 1");
     QRadioButton *choice2 = new QRadioButton("Scheme 2");
     QLabel *scoreText = new QLabel("Total Score out of 100:");
-    QLabel *score = new QLabel("0");
+    ScoreLabel *score = new ScoreLabel();
+    QPushButton *calculate = new QPushButton("Calculate!");
+    QObject::connect(calculate, SIGNAL(clicked(bool)), score, SLOT(updateValue()));
+
+    //Finish our connections to the total score
+    QObject::connect(hw1, SIGNAL(currentIndexChanged(int)), score, SLOT(increaseScoreHWK(int)));
+    QObject::connect(hw2, SIGNAL(currentIndexChanged(int)), score, SLOT(increaseScoreHWK(int)));
+    QObject::connect(hw3, SIGNAL(currentIndexChanged(int)), score, SLOT(increaseScoreHWK(int)));
+    QObject::connect(hw4, SIGNAL(currentIndexChanged(int)), score, SLOT(increaseScoreHWK(int)));
+    QObject::connect(hw5, SIGNAL(currentIndexChanged(int)), score, SLOT(increaseScoreHWK(int)));
+    QObject::connect(hw6, SIGNAL(currentIndexChanged(int)), score, SLOT(increaseScoreHWK(int)));
+    QObject::connect(hw7, SIGNAL(currentIndexChanged(int)), score, SLOT(increaseScoreHWK(int)));
+    QObject::connect(hw8, SIGNAL(currentIndexChanged(int)), score, SLOT(increaseScoreHWK(int)));
+    QObject::connect(hw9, SIGNAL(currentIndexChanged(int)), score, SLOT(increaseScoreHWK(int)));
+    QObject::connect(hw10, SIGNAL(currentIndexChanged(int)), score, SLOT(increaseScoreHWK(int)));
+    QObject::connect(mt1slide, SIGNAL(valueChanged(int)), score, SLOT(increaseScoreMT(int)));
+    QObject::connect(mt2slide, SIGNAL(valueChanged(int)), score, SLOT(increaseScoreMT(int)));
+    QObject::connect(finalSlide, SIGNAL(valueChanged(int)), score, SLOT(increaseScoreFinal(int)));
 
     //Create the Layout
     QGridLayout *layout = new QGridLayout;
-    //Add the text
+    //Add the Homework labels
     layout->addWidget(hw1Text, 0 , 0);
     layout->addWidget(hw2Text, 1 , 0);
     layout->addWidget(hw3Text, 2 , 0);
@@ -85,7 +105,7 @@ int main(int argc, char *argv[])
     layout->addWidget(hw8Text, 7 , 0);
     layout->addWidget(hw9Text, 8 , 0);
     layout->addWidget(hw10Text, 9 , 0);
-    //Add the score selection
+    //Add the Homework score selection
     layout->addWidget(hw1, 0 , 1);
     layout->addWidget(hw2, 1 , 1);
     layout->addWidget(hw3, 2 , 1);
@@ -111,6 +131,7 @@ int main(int argc, char *argv[])
     layout->addWidget(choice2, 11, 0);
     layout->addWidget(scoreText, 10, 1);
     layout->addWidget(score, 11, 1);
+    layout->addWidget(calculate, 10, 2);
 
     window->setLayout(layout);
     w.setCentralWidget(window);
