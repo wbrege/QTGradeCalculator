@@ -70,12 +70,15 @@ int main(int argc, char *argv[])
     QObject::connect(finalSlide, SIGNAL(valueChanged(int)), finalDisplay, SLOT(setNum(int)));
 
     //Create the Grading input and ouput
-    QRadioButton *choice1 = new QRadioButton("Scheme 1");
-    QRadioButton *choice2 = new QRadioButton("Scheme 2");
+    QRadioButton *choiceA = new QRadioButton("Scheme A");
+    choiceA->setChecked(true);
+    QRadioButton *choiceB = new QRadioButton("Scheme B");
     QLabel *scoreText = new QLabel("Total Score out of 100:");
     ScoreLabel *score = new ScoreLabel();
     QPushButton *calculate = new QPushButton("Calculate!");
-    QObject::connect(calculate, SIGNAL(clicked(bool)), score, SLOT(updateValue()));
+    QObject::connect(calculate, SIGNAL(clicked(bool)), score, SLOT(calcValue()));
+    QObject::connect(choiceA, SIGNAL(toggled(bool)), score, SLOT(schemeA()));
+    QObject::connect(choiceB, SIGNAL(toggled(bool)), score, SLOT(schemeB()));
 
     //Finish our connections to the total score
     QObject::connect(hw1, SIGNAL(currentIndexChanged(int)), score, SLOT(increaseScoreHWK(int)));
@@ -88,8 +91,8 @@ int main(int argc, char *argv[])
     QObject::connect(hw8, SIGNAL(currentIndexChanged(int)), score, SLOT(increaseScoreHWK(int)));
     QObject::connect(hw9, SIGNAL(currentIndexChanged(int)), score, SLOT(increaseScoreHWK(int)));
     QObject::connect(hw10, SIGNAL(currentIndexChanged(int)), score, SLOT(increaseScoreHWK(int)));
-    QObject::connect(mt1slide, SIGNAL(valueChanged(int)), score, SLOT(increaseScoreMT(int)));
-    QObject::connect(mt2slide, SIGNAL(valueChanged(int)), score, SLOT(increaseScoreMT(int)));
+    QObject::connect(mt1slide, SIGNAL(valueChanged(int)), score, SLOT(increaseScoreMT1(int)));
+    QObject::connect(mt2slide, SIGNAL(valueChanged(int)), score, SLOT(increaseScoreMT2(int)));
     QObject::connect(finalSlide, SIGNAL(valueChanged(int)), score, SLOT(increaseScoreFinal(int)));
 
     //Create the Layout
@@ -127,8 +130,8 @@ int main(int argc, char *argv[])
     layout->addWidget(finalSlide, 7, 2);
     layout->addWidget(finalDisplay, 8, 2);
     //Finally add the grading information
-    layout->addWidget(choice1, 10, 0);
-    layout->addWidget(choice2, 11, 0);
+    layout->addWidget(choiceA, 10, 0);
+    layout->addWidget(choiceB, 11, 0);
     layout->addWidget(scoreText, 10, 1);
     layout->addWidget(score, 11, 1);
     layout->addWidget(calculate, 10, 2);
